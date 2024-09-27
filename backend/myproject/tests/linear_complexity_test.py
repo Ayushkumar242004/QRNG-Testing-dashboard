@@ -70,15 +70,15 @@ class ComplexityTest:
             p_value = gammaincc(degree_of_freedom / 2.0, xObs / 2.0)
 
             if verbose:
-                print('Linear Complexity Test DEBUG BEGIN:')
-                print("\tLength of input:\t", length_of_binary_data)
-                print('\tLength in bits of a block:\t', )
-                print("\tDegree of Freedom:\t\t", degree_of_freedom)
-                print('\tNumber of Blocks:\t', number_of_block)
-                print('\tValue of Vs:\t\t', vg)
-                print('\txObs:\t\t\t\t', xObs)
+                print('Linear Complexity Test:')
+                # print("\tLength of input:\t", length_of_binary_data)
+                # print('\tLength in bits of a block:\t', )
+                # print("\tDegree of Freedom:\t\t", degree_of_freedom)
+                # print('\tNumber of Blocks:\t', number_of_block)
+                # print('\tValue of Vs:\t\t', vg)
+                # print('\txObs:\t\t\t\t', xObs)
                 print('\tP-Value:\t\t\t', p_value)
-                print('DEBUG END.')
+                # print('DEBUG END.')
 
 
             return (p_value, (p_value >= 0.01))

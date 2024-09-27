@@ -67,13 +67,13 @@ class TemplateMatching:
 
         if verbose:
             print('Non-Overlapping Template Test DEBUG BEGIN:')
-            print("\tLength of input:\t\t", length_of_binary)
-            print('\tValue of Mean (µ):\t\t', mean)
-            print('\tValue of Variance(σ):\t', variance)
-            print('\tValue of W:\t\t\t\t', pattern_counts)
-            print('\tValue of xObs:\t\t\t', xObs)
+            # print("\tLength of input:\t\t", length_of_binary)
+            # print('\tValue of Mean (µ):\t\t', mean)
+            # print('\tValue of Variance(σ):\t', variance)
+            # print('\tValue of W:\t\t\t\t', pattern_counts)
+            # print('\tValue of xObs:\t\t\t', xObs)
             print('\tP-Value:\t\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value, (p_value >= 0.01))
 
@@ -95,25 +95,22 @@ class TemplateMatching:
         :return:    (p_value, bool) A tuple which contain the p_value and result of frequency_test(True or False)
         """
         length_of_binary_data = len(binary_data)
-       
-        # print('Length of binary string: ', length_of_binary_data)
 
-        # Initialized k, m. n, pi and v_values
         if length_of_binary_data == 0:
             # Not enough data to run this test
             return (0.00000, False, 'Error: Not enough data to run this test')
 
-        pattern = ''
-        for count in range(pattern_size):
-            pattern += '1'
+        # Create the pattern (all '1's by default for pattern_size)
+        pattern = '1' * pattern_size
 
         number_of_block = floor(length_of_binary_data / block_size)
 
-        # λ = (M-m+1)/pow(2, m)
+        # λ = (M-m+1) / 2^m
         lambda_val = float(block_size - pattern_size + 1) / pow(2, pattern_size)
-        # η = λ/2
+        # η = λ / 2
         eta = lambda_val / 2.0
 
+        # Probability distribution for the number of hits of the pattern in a block
         pi = [TemplateMatching.get_prob(i, eta) for i in range(5)]
         diff = float(array(pi).sum())
         pi.append(1.0 - diff)
@@ -123,6 +120,7 @@ class TemplateMatching:
             block_start = i * block_size
             block_end = block_start + block_size
             block_data = binary_data[block_start:block_end]
+
             # Count the number of pattern hits
             pattern_count = 0
             j = 0
@@ -131,27 +129,29 @@ class TemplateMatching:
                 if sub_block == pattern:
                     pattern_count += 1
                 j += 1
+
             if pattern_count <= 4:
                 pattern_counts[pattern_count] += 1
             else:
                 pattern_counts[5] += 1
 
+        # Calculate the chi-squared statistic (xObs)
         xObs = 0.0
         for i in range(len(pattern_counts)):
             xObs += pow(pattern_counts[i] - number_of_block * pi[i], 2.0) / (number_of_block * pi[i])
 
+        # Compute the p-value using the incomplete gamma function
         p_value = gammaincc(5.0 / 2.0, xObs / 2.0)
 
         if verbose:
-            print('Overlapping Template Test DEBUG BEGIN:')
-            print("\tLength of input:\t\t", length_of_binary_data)
-            print('\tValue of Vs:\t\t\t', pattern_counts)
-            print('\tValue of xObs:\t\t\t', xObs)
+            print('Overlapping Template Test :')
             print('\tP-Value:\t\t\t\t', p_value)
-            print('DEBUG END.')
 
-
+        # Return the computed p-value and whether the test passed
         return (p_value, (p_value >= 0.01))
+
+        # In case of any issues, return a fallback value of 0 if no value has been returned
+        return (0, False)
 
     @staticmethod
     def get_prob(u, x):

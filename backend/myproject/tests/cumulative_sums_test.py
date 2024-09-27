@@ -71,11 +71,11 @@ class CumulativeSums:
         p_value += sum(array(terms_two))
 
         if verbose:
-            print('Cumulative Sums Test DEBUG BEGIN:')
-            print("\tLength of input:\t", length_of_binary_data)
-            print('\tMode:\t\t\t\t', mode)
-            print('\tValue of z:\t\t\t', abs_max)
+            print('Cumulative Sums Test: ')
+            # print("\tLength of input:\t", length_of_binary_data)
+            # print('\tMode:\t\t\t\t', mode)
+            # print('\tValue of z:\t\t\t', abs_max)
             print('\tP-Value:\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value, (p_value >= 0.01))

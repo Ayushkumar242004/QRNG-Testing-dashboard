@@ -106,13 +106,13 @@ class Universal:
             p_value = erfc(stat)
 
             if verbose:
-                print('Maurer\'s Universal Statistical Test DEBUG BEGIN:')
-                print("\tLength of input:\t\t", length_of_binary_data)
-                print('\tLength of each block:\t', pattern_size)
-                print('\tNumber of Blocks:\t\t', init_bits)
-                print('\tValue of phi:\t\t\t', phi)
+                print('Maurer\'s Universal Statistical Test')
+                # print("\tLength of input:\t\t", length_of_binary_data)
+                # print('\tLength of each block:\t', pattern_size)
+                # print('\tNumber of Blocks:\t\t', init_bits)
+                # print('\tValue of phi:\t\t\t', phi)
                 print('\tP-Value:\t\t\t\t', p_value)
-                print('DEBUG END.')
+                # print('DEBUG END.')
 
             return (p_value, (p_value>=0.01))
         else:

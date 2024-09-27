@@ -28,6 +28,11 @@ urlpatterns = [
     #live streaming
     path('stream-binary/', sse_binary_view, name='sse_binary_view'),
     path('sse_binary_example/', sse_binary_example_view, name='sse_binary_example_view'),
+    
+    #report generation
+    path('pdf-report/', views.generate_pdf_report, name='generate_pdf_report'),
+    #graph generation
+    path('graph-generation/', views.create_graph, name='create_graph'),
 ]
 
 # http://127.0.0.1:8000/sse_binary_example/

@@ -58,13 +58,13 @@ class Serial:
         # p_value_02 = gammaincc(pow(2, pattern_length - 2) / 2, nabla_02 / 2.0)
 
         if verbose:
-            print('Serial Test DEBUG BEGIN:')
-            print("\tLength of input:\t", length_of_binary_data)
-            print('\tValue of Sai:\t\t', sums)
-            print('\tValue of Nabla:\t\t', nabla_01, nabla_02)
+            print('Serial Test ')
+            # print("\tLength of input:\t", length_of_binary_data)
+            # print('\tValue of Sai:\t\t', sums)
+            # print('\tValue of Nabla:\t\t', nabla_01, nabla_02)
             print('\tP-Value 01:\t\t\t', p_value_01)
             print('\tP-Value 02:\t\t\t', p_value_02)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value_01, p_value_01 >= 0.01)
         # , (p_value_02, p_value_02 >= 0.01))

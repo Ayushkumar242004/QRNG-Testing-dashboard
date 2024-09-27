@@ -56,12 +56,12 @@ class ApproximateEntropy:
         p_value = gammaincc(pow(2, pattern_length - 1), xObs / 2.0)
 
         if verbose:
-            print('Approximate Entropy Test DEBUG BEGIN:')
-            print("\tLength of input:\t\t\t", length_of_binary_data)
-            print('\tLength of each block:\t\t', pattern_length)
-            print('\tApEn(m):\t\t\t\t\t', ape)
-            print('\txObs:\t\t\t\t\t\t', xObs)
+            print('Approximate Entropy Test: ')
+            # print("\tLength of input:\t\t\t", length_of_binary_data)
+            # print('\tLength of each block:\t\t', pattern_length)
+            # print('\tApEn(m):\t\t\t\t\t', ape)
+            # print('\txObs:\t\t\t\t\t\t', xObs)
             print('\tP-Value:\t\t\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value, (p_value >= 0.01))

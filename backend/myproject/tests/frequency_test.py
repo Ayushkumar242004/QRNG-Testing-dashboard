@@ -46,45 +46,48 @@ class FrequencyTest:
         p_value = erfc(fabs(sObs) / sqrt(2))
 
         if verbose:
-            print('Frequency Test (Monobit Test) DEBUG BEGIN:')
-            print("\tLength of input:\t", length_of_bit_string)
-            print('\t# of \'0\':\t\t\t', binary_data.count('0'))
-            print('\t# of \'1\':\t\t\t', binary_data.count('1'))
-            print('\tS(n):\t\t\t\t', count)
-            print('\tsObs:\t\t\t\t', sObs)
-            print('\tf:\t\t\t\t\t',fabs(sObs) / sqrt(2))
+            print('Frequency Test (Monobit Test):')
+            # print("\tLength of input:\t", length_of_bit_string)
+            # print('\t# of \'0\':\t\t\t', binary_data.count('0'))
+            # print('\t# of \'1\':\t\t\t', binary_data.count('1'))
+            # print('\tS(n):\t\t\t\t', count)
+            # print('\tsObs:\t\t\t\t', sObs)
+            # print('\tf:\t\t\t\t\t',fabs(sObs) / sqrt(2))
             print('\tP-Value:\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         # return a p_value and randomness result
         return (p_value, (p_value >= 0.01))
 
     @staticmethod
-    def block_frequency(binary_data:str, block_size=128, verbose=False):
+    def block_frequency(binary_data: str, block_size=128, verbose=False):
         """
         The focus of the test is the proportion of ones within M-bit blocks.
         The purpose of this test is to determine whether the frequency of ones in an M-bit block is approximately M/2,
         as would be expected under an assumption of randomness.
         For block size M=1, this test degenerates to test 1, the Frequency (Monobit) test.
 
-        :param      binary_data:        The length of each block
-        :param      block_size:         The seuqnce of bit being tested
-        :param      verbose             True to display the debug messgae, False to turn off debug message
-        :return:    (p_value, bool)     A tuple which contain the p_value and result of frequency_test(True or False)
+        :param binary_data: The sequence of bits being tested
+        :param block_size: The length of each block
+        :param verbose: True to display the debug message, False to turn off debug message
+        :return: (p_value, bool) A tuple containing the p_value and result of frequency_test(True or False)
         """
 
         length_of_bit_string = len(binary_data)
 
+        if block_size <= 0:
+            # Return None if block_size is not positive
+            return None, False
 
         if length_of_bit_string < block_size:
             block_size = length_of_bit_string
 
-        # Compute the number of blocks based on the input given.  Discard the remainder
+        # Compute the number of blocks based on the input given. Discard the remainder
         number_of_blocks = floor(length_of_bit_string / block_size)
 
-        if number_of_blocks == 1:
-            # For block size M=1, this test degenerates to test 1, the Frequency (Monobit) test.
-            return FrequencyTest.monobit_test(binary_data[0:block_size])
+        if number_of_blocks <= 1:
+            # For block size M=1 or not enough blocks, return None
+            return None, False
 
         # Initialized variables
         block_start = 0
@@ -96,7 +99,7 @@ class FrequencyTest:
             # Partition the input sequence and get the data for block
             block_data = binary_data[block_start:block_end]
 
-            # Determine the proportion 蟺i of ones in each M-bit
+            # Determine the proportion π of ones in each M-bit block
             one_count = 0
             for bit in block_data:
                 if bit == '1':

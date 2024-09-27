@@ -61,13 +61,13 @@ class SpectralTest:
         p_value = erfc(fabs(d) / sqrt(2))
 
         if verbose:
-            print('Discrete Fourier Transform (Spectral) Test DEBUG BEGIN:')
-            print('\tLength of Binary Data:\t', length_of_binary_data)
-            print('\tValue of T:\t\t\t\t', tau)
-            print('\tValue of n1:\t\t\t', n1)
-            print('\tValue of n0:\t\t\t', n0)
-            print('\tValue of d:\t\t\t\t', d)
+            print('Discrete Fourier Transform (Spectral) Test :')
+            # print('\tLength of Binary Data:\t', length_of_binary_data)
+            # print('\tValue of T:\t\t\t\t', tau)
+            # print('\tValue of n1:\t\t\t', n1)
+            # print('\tValue of n0:\t\t\t', n0)
+            # print('\tValue of d:\t\t\t\t', d)
             print('\tP-Value:\t\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value, (p_value >= 0.01))

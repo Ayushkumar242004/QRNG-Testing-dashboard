@@ -8,7 +8,7 @@ from numpy import zeros as zeros
 class RunTest:
 
     @staticmethod
-    def run_test(binary_data:str, verbose=False):
+    def run_test(binary_data: str, verbose=False):
         """
         The focus of this test is the total number of runs in the sequence,
         where a run is an uninterrupted sequence of identical bits.
@@ -18,49 +18,45 @@ class RunTest:
         expected for a random sequence. In particular, this test determines whether the
         oscillation between such zeros and ones is too fast or too slow.
 
-        :param      binary_data:        The seuqnce of bit being tested
-        :param      verbose             True to display the debug messgae, False to turn off debug message
-        :return:    (p_value, bool)     A tuple which contain the p_value and result of frequency_test(True or False)
+        :param      binary_data:        The sequence of bits being tested
+        :param      verbose:            True to display the debug message, False to turn off debug message
+        :return:    (p_value, bool)     A tuple that contains the p_value and result of the frequency test (True or False)
         """
-        one_count = 0
         vObs = 0
         length_of_binary_data = len(binary_data)
 
         # Predefined tau = 2 / sqrt(n)
-        # TODO Confirm with Frank about the discrepancy between the formula and the sample of 2.3.8
         tau = 2 / sqrt(length_of_binary_data)
 
-        # Step 1 - Compute the pre-test proportion πof ones in the input sequence: π = Σjεj / n
+        # Step 1 - Compute the proportion π of ones in the input sequence
         one_count = binary_data.count('1')
-
         pi = one_count / length_of_binary_data
 
-        # Step 2 - If it can be shown that absolute value of (π - 0.5) is greater than or equal to tau
-        # then the run test need not be performed.
+        # Step 2 - Check if |π - 0.5| >= tau
         if abs(pi - 0.5) >= tau:
-            ##print("The test should not have been run because of a failure to pass test 1, the Frequency (Monobit) test.")
+            # The test should not proceed because of a failure to pass the pre-test
             return (0.0000, False)
-        else:
-            # Step 3 - Compute vObs
-            for item in range(1, length_of_binary_data):
-                if binary_data[item] != binary_data[item - 1]:
-                    vObs += 1
-            vObs += 1
 
-            # Step 4 - Compute p_value = erfc((|vObs − 2nπ * (1−π)|)/(2 * sqrt(2n) * π * (1−π)))
-            p_value = erfc(abs(vObs - (2 * (length_of_binary_data) * pi * (1 - pi))) / (2 * sqrt(2 * length_of_binary_data) * pi * (1 - pi)))
+        # Step 3 - Compute vObs (number of runs)
+        for item in range(1, length_of_binary_data):
+            if binary_data[item] != binary_data[item - 1]:
+                vObs += 1
+        vObs += 1
+
+        try:
+            # Step 4 - Compute p_value using the erfc function
+            p_value = erfc(abs(vObs - (2 * length_of_binary_data * pi * (1 - pi))) /
+                        (2 * sqrt(2 * length_of_binary_data) * pi * (1 - pi)))
+
+        except ZeroDivisionError:
+            # Return -1 in case of a division by zero error
+            return (-1, False)
 
         if verbose:
             print('Run Test DEBUG BEGIN:')
-            print("\tLength of input:\t\t\t\t", length_of_binary_data)
-            print("\tTau (2/sqrt(length of input)):\t", tau)
-            print('\t# of \'1\':\t\t\t\t\t\t', one_count)
-            print('\t# of \'0\':\t\t\t\t\t\t', binary_data.count('0'))
-            print('\tPI (1 count / length of input):\t', pi)
-            print('\tvObs:\t\t\t\t\t\t\t', vObs)
             print('\tP-Value:\t\t\t\t\t\t', p_value)
-            print('DEBUG END.')
 
+        # Return the p_value and whether the test passed (p_value > 0.01)
         return (p_value, (p_value > 0.01))
 
     @staticmethod
@@ -147,15 +143,15 @@ class RunTest:
         p_value = gammaincc(float(k / 2), float(xObs / 2))
 
         if verbose:
-            print('Run Test (Longest Run of Ones in a Block) DEBUG BEGIN:')
-            print("\tLength of input:\t\t\t\t", length_of_binary_data)
-            print("\tSize of each Block:\t\t\t\t", m)
-            print('\tNumber of Block:\t\t\t\t', number_of_blocks)
-            print("\tValue of K:\t\t\t\t\t\t", k)
-            print('\tValue of PIs:\t\t\t\t\t', pi_values)
-            print('\tFrequencies:\t\t\t\t\t', frequencies)
-            print('\txObs:\t\t\t\t\t\t\t', xObs)
+            print('Run Test (Longest Run of Ones in a Block) :')
+            # print("\tLength of input:\t\t\t\t", length_of_binary_data)
+            # print("\tSize of each Block:\t\t\t\t", m)
+            # print('\tNumber of Block:\t\t\t\t', number_of_blocks)
+            # print("\tValue of K:\t\t\t\t\t\t", k)
+            # print('\tValue of PIs:\t\t\t\t\t', pi_values)
+            # print('\tFrequencies:\t\t\t\t\t', frequencies)
+            # print('\txObs:\t\t\t\t\t\t\t', xObs)
             print('\tP-Value:\t\t\t\t\t\t', p_value)
-            print('DEBUG END.')
+            # print('DEBUG END.')
 
         return (p_value, (p_value > 0.01))
