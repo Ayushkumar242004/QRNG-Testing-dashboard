@@ -60,25 +60,23 @@ class RunTest:
         return (p_value, (p_value > 0.01))
 
     @staticmethod
-    def longest_one_block_test(binary_data:str, verbose=False):
+    def longest_one_block_test(binary_data: str, verbose=False):
         """
         The focus of the test is the longest run of ones within M-bit blocks. The purpose of this test is to determine
         whether the length of the longest run of ones within the tested sequence is consistent with the length of the
         longest run of ones that would be expected in a random sequence. Note that an irregularity in the expected
-        length of the longest run of ones implies that there is also an irregularity in the expected length of the
+        length of the longest run of ones implies that there is also an irregularity in the expected length of the 
         longest run of zeroes. Therefore, only a test for ones is necessary.
 
         :param      binary_data:        The sequence of bits being tested
-        :param      verbose             True to display the debug messgae, False to turn off debug message
-        :return:    (p_value, bool)     A tuple which contain the p_value and result of frequency_test(True or False)
+        :param      verbose             True to display the debug message, False to turn off debug message
+        :return:    (p_value, bool)     A tuple which contains the p_value and result of frequency_test(True or False)
         """
         length_of_binary_data = len(binary_data)
-        # print('Length of binary string: ', length_of_binary_data)
 
-        # Initialized k, m. n, pi and v_values
+        # Initialize k, m, v_values, and pi_values
         if length_of_binary_data < 128:
-            # Not enough data to run this test
-            return (0.00000, False, 'Error: Not enough data to run this test')
+            return (-1, False, 'Error: Not enough data to run this test')
         elif length_of_binary_data < 6272:
             k = 3
             m = 8
@@ -100,17 +98,14 @@ class RunTest:
         block_start = 0
         block_end = m
         xObs = 0
-        # This will intialized an array with a number of 0 you specified.
         frequencies = zeros(k + 1)
-
-        # print('Number of Blocks: ', number_of_blocks)
 
         for count in range(number_of_blocks):
             block_data = binary_data[block_start:block_end]
             max_run_count = 0
             run_count = 0
 
-            # This will count the number of ones in the block
+            # Count the number of ones in the block
             for bit in block_data:
                 if bit == '1':
                     run_count += 1
@@ -119,9 +114,7 @@ class RunTest:
                     max_run_count = max(max_run_count, run_count)
                     run_count = 0
 
-            max(max_run_count, run_count)
-
-            #print('Block Data: ', block_data, '. Run Count: ', max_run_count)
+            max_run_count = max(max_run_count, run_count)
 
             if max_run_count < v_values[0]:
                 frequencies[0] += 1
@@ -134,7 +127,6 @@ class RunTest:
             block_start += m
             block_end += m
 
-        # print("Frequencies: ", frequencies)
         # Compute xObs
         for count in range(len(frequencies)):
             xObs += pow((frequencies[count] - (number_of_blocks * pi_values[count])), 2.0) / (
@@ -144,14 +136,10 @@ class RunTest:
 
         if verbose:
             print('Run Test (Longest Run of Ones in a Block) :')
-            # print("\tLength of input:\t\t\t\t", length_of_binary_data)
-            # print("\tSize of each Block:\t\t\t\t", m)
-            # print('\tNumber of Block:\t\t\t\t', number_of_blocks)
-            # print("\tValue of K:\t\t\t\t\t\t", k)
-            # print('\tValue of PIs:\t\t\t\t\t', pi_values)
-            # print('\tFrequencies:\t\t\t\t\t', frequencies)
-            # print('\txObs:\t\t\t\t\t\t\t', xObs)
             print('\tP-Value:\t\t\t\t\t\t', p_value)
-            # print('DEBUG END.')
 
-        return (p_value, (p_value > 0.01))
+        # Consistent return values
+        if length_of_binary_data < 128:
+            return (-1, False, 'Error: Not enough data to run this test')
+        
+        return (p_value, (p_value > 0.01), None)

@@ -23,6 +23,10 @@ urlpatterns = [
     path('random_excursions_variant_test/',views.random_excursions_variant_test, name='random_excursions_variant_test'),
     path('run_binary_matrix_rank_text/',views.run_binary_matrix_rank_text, name='run_binary_matrix_rank_test'),
     path('run_spectral_test/',views.run_spectral_test, name='run_spectral_test'),
+
+    path('run_autocorrelation_test/',views.run_autocorrelation_test, name='run_autocorrelation_test'),
+    path('run_adaptive_statistical_test/',views.run_adaptive_statistical_test, name='adaptive_statistical_test'),
+
     path('binary-data/', views.send_binary_data, name='send_binary_data'),
 
     #live streaming

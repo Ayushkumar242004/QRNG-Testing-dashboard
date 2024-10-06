@@ -60,7 +60,7 @@ class FrequencyTest:
         return (p_value, (p_value >= 0.01))
 
     @staticmethod
-    def block_frequency(binary_data: str, block_size=128, verbose=False):
+    def block_frequency(binary_data: str, block_size=128, verbose=False): 
         """
         The focus of the test is the proportion of ones within M-bit blocks.
         The purpose of this test is to determine whether the frequency of ones in an M-bit block is approximately M/2,
@@ -70,24 +70,24 @@ class FrequencyTest:
         :param binary_data: The sequence of bits being tested
         :param block_size: The length of each block
         :param verbose: True to display the debug message, False to turn off debug message
-        :return: (p_value, bool) A tuple containing the p_value and result of frequency_test(True or False)
+        :return: (p_value, bool) A tuple containing the p_value and result of frequency_test (True or False)
         """
 
         length_of_bit_string = len(binary_data)
 
         if block_size <= 0:
             # Return None if block_size is not positive
-            return None, False
+            return -1, False  # Ensure we always return some p_value
 
         if length_of_bit_string < block_size:
-            block_size = length_of_bit_string
+            return -1, False  # Return (-1, False) if not enough data
 
         # Compute the number of blocks based on the input given. Discard the remainder
         number_of_blocks = floor(length_of_bit_string / block_size)
 
         if number_of_blocks <= 1:
-            # For block size M=1 or not enough blocks, return None
-            return None, False
+            # For block size M=1 or not enough blocks, return (-1, False)
+            return -1, False
 
         # Initialized variables
         block_start = 0
@@ -100,11 +100,9 @@ class FrequencyTest:
             block_data = binary_data[block_start:block_end]
 
             # Determine the proportion π of ones in each M-bit block
-            one_count = 0
-            for bit in block_data:
-                if bit == '1':
-                    one_count += 1
-            # compute π
+            one_count = block_data.count('1')
+            
+            # Compute π
             pi = one_count / block_size
 
             # Compute Σ(πi -½)^2.
@@ -131,4 +129,4 @@ class FrequencyTest:
             print('\tP-Value:\t\t\t', p_value)
             print('DEBUG END.')
 
-        return (p_value, (p_value >= 0.01))
+        return p_value, (p_value >= 0.01)
